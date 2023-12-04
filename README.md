@@ -8,6 +8,24 @@
 
 [API](https://viacep.com.br/ws/58059164/json)
 
+> nota sjdlkajsd
+>
+> asasas
+
+
+```bash
+
+#Criar app
+Npx react-native init buscacep
+
+//Rodar app
+npx react-native start
+Npx react-native run-android
+
+//Pacotes usados
+npm install axios
+
+```
 
 ```javascript
 
