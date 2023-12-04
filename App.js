@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react'
-import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard  } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard, Modal  } from 'react-native'
 
+import Detalhes from './src/Modal'
 
 export default function App() {
   const [alcool, setAlcool] = useState('');
   const [gasolina, setGasolina] = useState('');
   const inputRef = useRef(null) //referência
+  const [visibleModal, setVisibleModal] = useState(false);
 
   function limpar (){
     setAlcool('')
@@ -21,7 +23,7 @@ export default function App() {
     const resultado = (alcool / gasolina)
 
     console.log(resultado)
-
+    setVisibleModal(true) 
     if(resultado < 0.7){
       console.log("Melhor alcool!")
     } else{
@@ -58,7 +60,8 @@ export default function App() {
 
         <View style={styles.areaBtn}>
         <TouchableOpacity
-          style={[styles.botao, {backgroundColor: '#1d75cd'}]} activeOpacity={0.7}
+          style={[styles.botao, {backgroundColor: '#1d75cd'}]}
+          activeOpacity={0.7}
           onPress={calcular}
           >
           <Text style={styles.botaoText}>Calcular</Text>
@@ -72,6 +75,10 @@ export default function App() {
             <Text style={styles.botaoText}>Limpar</Text>
           </TouchableOpacity>
         </View>
+
+        <Modal transparent={true} animationType="slide-up" visible={visibleModal}>
+          <Detalhes gasolina={gasolina} voltar={() => setVisibleModal(false) } />
+        </Modal>
 
       </SafeAreaView>
     )
