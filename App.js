@@ -1,118 +1,137 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState, useRef } from 'react'
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard  } from 'react-native'
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export default function App() {
+  const [alcool, setAlcool] = useState('');
+  const [gasolina, setGasolina] = useState('');
+  const inputRef = useRef(null) //referência
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  function limpar (){
+    setAlcool('')
+    setGasolina('')
+    //clicando em limpar o cursos aparece no input
+    inputRef.current.focus()
+  }
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  function calcular(){
+    //let alcool = parseFloat(alcool);
+    //let gasolina = parseFloat(gasolina);
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+    const resultado = (alcool / gasolina)
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    console.log(resultado)
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    if(resultado < 0.7){
+      console.log("Melhor alcool!")
+    } else{
+      console.log("Melhor gasolina!")
+    }
+  }
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.areaTitulo}>
+          <Text style={styles.textTitulo}>Qual melhor opção?</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+
+        <View style={styles.areaInput}>
+          <Text style={styles.inputLabel}>Álcool (preço por litro):</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Ex: 4.60"
+            value={alcool}
+            onChangeText={setAlcool}
+            keyboardType='numeric'
+            ref={inputRef}
+            />
+
+          <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Ex: 7.30"
+            value={gasolina}
+            onChangeText={setGasolina}
+            keyboardType='numeric'
+            />
+        </View>
+
+        <View style={styles.areaBtn}>
+        <TouchableOpacity
+          style={[styles.botao, {backgroundColor: '#1d75cd'}]} activeOpacity={0.7}
+          onPress={calcular}
+          >
+          <Text style={styles.botaoText}>Calcular</Text>
+        </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.botao}
+            activeOpacity={0.7}
+            onPress={limpar}
+            >
+            <Text style={styles.botaoText}>Limpar</Text>
+          </TouchableOpacity>
+        </View>
+
+      </SafeAreaView>
+    )
 }
+
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1, //ocupa todo espaço disponivel
+    backgroundColor: '#000'
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  areaTitulo:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 45,
+    marginTop: 20
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  textTitulo:{
+    fontSize:25,
+    color: '#FFF'
   },
-  highlight: {
-    fontWeight: '700',
+  areaInput:{
+    alignItems: 'center',
+    //alignItems: 'flex-start', // Isso alinha o componente filho (Text)
+    justifyContent: 'center',
   },
-});
+  inputLabel:{
+    color: '#FFF',
+    marginBottom: 5,
+    textAlign: 'left', // Isso alinha o texto à esquerda
+    //alignItems: 'flex-start',
+    justifyContent: 'center'
+  },
+  input:{
+    backgroundColor: '#FFF', //cor interna
+    borderWidth: 1, //borda
+    borderColor: '#DDD', //cor borda
+    borderRadius: 5, //borda arredondada
+    width: '90%', //largura
+    padding: 10, //distância interna
+    fontSize: 18 //tamanho da fonte
+  },
+  areaBtn:{
+    alignItems: 'center', //centralizar verticalmente
+    marginTop: 15,
+    justifyContent: 'center' //espaço entre botões
+  },
+  botao:{
+    backgroundColor: '#cd3e1d',
+    height: 70,
+    width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 5,
+    marginBottom: 15
+  },
+  botaoText:{
+    fontSize: 22,
+    color: '#FFF'
+  },
 
-export default App;
+});
