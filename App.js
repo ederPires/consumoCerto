@@ -6,30 +6,51 @@ import Detalhes from './src/Modal'
 export default function App() {
   const [alcool, setAlcool] = useState('');
   const [gasolina, setGasolina] = useState('');
+  const [resultado, setResultado] = useState('');
   const inputRef = useRef(null) //referência
   const [visibleModal, setVisibleModal] = useState(false);
+  const [dadosParaModal, setDadosParaModal] = useState(null)
 
   function limpar (){
     setAlcool('')
     setGasolina('')
+    setResultado('')
+
     //clicando em limpar o cursos aparece no input
     inputRef.current.focus()
   }
 
-  function calcular(){
-    //let alcool = parseFloat(alcool);
-    //let gasolina = parseFloat(gasolina);
+  const fecharModal = () => {
+    setVisibleModal(false);
+    limpar()
+  };
 
-    const resultado = (alcool / gasolina)
+  const formatarMoedaBRL = (valor) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(valor);
+  };
 
-    console.log(resultado)
-    setVisibleModal(true) 
-    if(resultado < 0.7){
-      console.log("Melhor alcool!")
-    } else{
-      console.log("Melhor gasolina!")
+  function calcular() {
+    if (alcool && gasolina) {
+      const calc = alcool / gasolina;
+
+      const resultadoAtualizado = calc < 0.7 ? 'Compensa usar Álcool' : 'Compensa usar Gasolina';
+
+      setDadosParaModal({
+        alcool: formatarMoedaBRL(alcool),
+        gasolina: formatarMoedaBRL(gasolina),
+        resultado: resultadoAtualizado,
+      });
+
+      setVisibleModal(true);
+    } else {
+      alert('Preencha todos os campos para continuar');
     }
   }
+
+
 
     return (
       <SafeAreaView style={styles.container}>
@@ -76,8 +97,8 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        <Modal transparent={true} animationType="slide-up" visible={visibleModal}>
-          <Detalhes gasolina={gasolina} voltar={() => setVisibleModal(false) } />
+        <Modal animationType="slide-up" visible={visibleModal}>
+          <Detalhes  dados={dadosParaModal} fecharModal={fecharModal} />
         </Modal>
 
       </SafeAreaView>
