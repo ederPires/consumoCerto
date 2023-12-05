@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard, Modal  } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard, Modal, Image  } from 'react-native'
 
 import Detalhes from './src/Modal'
 
@@ -54,12 +54,21 @@ export default function App() {
 
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.areaImagem}>
+          <Image
+            source={require('./src/assets/gas-removebg-preview.png')}
+            style={styles.imagem}
+          />
+        </View>
+
         <View style={styles.areaTitulo}>
           <Text style={styles.textTitulo}>Qual melhor opção?</Text>
         </View>
 
         <View style={styles.areaInput}>
-          <Text style={styles.inputLabel}>Álcool (preço por litro):</Text>
+          <View style={styles.areaLabel}>
+            <Text style={styles.inputLabel}>Álcool (preço por litro):</Text>
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Ex: 4.60"
@@ -68,8 +77,9 @@ export default function App() {
             keyboardType='numeric'
             ref={inputRef}
             />
-
-          <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
+          <View style={styles.areaLabel}>
+            <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Ex: 7.30"
@@ -111,6 +121,17 @@ const styles = StyleSheet.create({
     flex: 1, //ocupa todo espaço disponivel
     backgroundColor: '#000'
   },
+  areaImagem:{
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  imagem: {
+    width: 200,
+    height: 200,
+    borderRadius: 100, // A metade da largura/altura para tornar a imagem circular
+    resizeMode: 'cover', // ou 'contain', 'stretch', etc.
+    //resizeMode: 'contain', // ou 'cover', 'stretch', etc.
+  },
   areaTitulo:{
     alignItems: 'center',
     justifyContent: 'center',
@@ -125,13 +146,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //alignItems: 'flex-start', // Isso alinha o componente filho (Text)
     justifyContent: 'center',
+    marginBottom: 15,
   },
-  inputLabel:{
+  areaLabel: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '90%', // Define a largura para ocupar 90% da largura do componente pai
+    marginTop: 15,
+  },
+  inputLabel: {
     color: '#FFF',
     marginBottom: 5,
-    textAlign: 'left', // Isso alinha o texto à esquerda
-    //alignItems: 'flex-start',
-    justifyContent: 'center'
+    textAlign: 'left',
   },
   input:{
     backgroundColor: '#FFF', //cor interna
