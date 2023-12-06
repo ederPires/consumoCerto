@@ -1,42 +1,77 @@
 import React, { useState, useRef } from 'react'
-import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard  } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Keyboard, Modal, Image  } from 'react-native'
 
+import Detalhes from './src/Modal'
 
 export default function App() {
   const [alcool, setAlcool] = useState('');
   const [gasolina, setGasolina] = useState('');
+  const [resultado, setResultado] = useState('');
   const inputRef = useRef(null) //referência
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [dadosParaModal, setDadosParaModal] = useState(null)
 
   function limpar (){
     setAlcool('')
     setGasolina('')
+    setResultado('')
+
     //clicando em limpar o cursos aparece no input
     inputRef.current.focus()
   }
 
-  function calcular(){
-    //let alcool = parseFloat(alcool);
-    //let gasolina = parseFloat(gasolina);
+  const fecharModal = () => {
+    setVisibleModal(false);
+    limpar()
+  };
 
-    const resultado = (alcool / gasolina)
+  const formatarMoedaBRL = (valor) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(valor);
+  };
 
-    console.log(resultado)
+  function calcular() {
+    if (alcool && gasolina) {
+      const calc = alcool / gasolina;
 
-    if(resultado < 0.7){
-      console.log("Melhor alcool!")
-    } else{
-      console.log("Melhor gasolina!")
+      const resultadoAtualizado = calc < 0.7 ? 'Compensa usar Álcool' : 'Compensa usar Gasolina';
+
+      setDadosParaModal({
+        alcool: formatarMoedaBRL(alcool),
+        gasolina: formatarMoedaBRL(gasolina),
+        resultado: resultadoAtualizado,
+      });
+
+      setVisibleModal(true);
+    } else {
+      alert('Preencha todos os campos para continuar');
     }
   }
 
+
+
     return (
       <SafeAreaView style={styles.container}>
+
+        <View style={styles.areaImagem}>
+          <View style={styles.imagemContainer}>
+            <Image
+              source={require('./src/assets/gas-bomb.png')}
+              style={styles.imagem}
+            />
+          </View>
+        </View>
+
         <View style={styles.areaTitulo}>
           <Text style={styles.textTitulo}>Qual melhor opção?</Text>
         </View>
 
         <View style={styles.areaInput}>
-          <Text style={styles.inputLabel}>Álcool (preço por litro):</Text>
+          <View style={styles.areaLabel}>
+            <Text style={styles.inputLabel}>Álcool (preço por litro):</Text>
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Ex: 4.60"
@@ -45,8 +80,9 @@ export default function App() {
             keyboardType='numeric'
             ref={inputRef}
             />
-
-          <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
+          <View style={styles.areaLabel}>
+            <Text style={styles.inputLabel}>Gasolina (preço por litro):</Text>
+          </View>
           <TextInput
             style={styles.input}
             placeholder="Ex: 7.30"
@@ -58,7 +94,8 @@ export default function App() {
 
         <View style={styles.areaBtn}>
         <TouchableOpacity
-          style={[styles.botao, {backgroundColor: '#1d75cd'}]} activeOpacity={0.7}
+          style={[styles.botao, {backgroundColor: '#1d75cd'}]}
+          activeOpacity={0.7}
           onPress={calcular}
           >
           <Text style={styles.botaoText}>Calcular</Text>
@@ -73,6 +110,10 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
+        <Modal animationType="slide-up" visible={visibleModal}>
+          <Detalhes  dados={dadosParaModal} fecharModal={fecharModal} />
+        </Modal>
+
       </SafeAreaView>
     )
 }
@@ -83,10 +124,32 @@ const styles = StyleSheet.create({
     flex: 1, //ocupa todo espaço disponivel
     backgroundColor: '#000'
   },
+  areaImagem: {
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center', // Centraliza horizontalmente
+    backgroundColor: 'white', // Fundo branco
+    borderRadius: 100, // Borda redonda (ajuste conforme necessário)
+    overflow: 'hidden', // Garante que a borda redonda seja aplicada corretamente
+    marginTop: 20, // Espaço superior para centralizar a imagem
+  },
+  imagemContainer: {
+    width: 175, // Ajuste conforme necessário
+    height: 200, // Ajuste conforme necessário
+    overflow: 'hidden',
+    borderRadius: 100, // A metade da largura/altura para tornar a imagem circular
+  },
+  imagem: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 100, // A metade da largura/altura para tornar a imagem circular
+    resizeMode: 'cover',
+  },
   areaTitulo:{
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 45,
+    marginBottom: 25,
     marginTop: 20
   },
   textTitulo:{
@@ -97,13 +160,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //alignItems: 'flex-start', // Isso alinha o componente filho (Text)
     justifyContent: 'center',
+    marginBottom: 15,
   },
-  inputLabel:{
+  areaLabel: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '90%', // Define a largura para ocupar 90% da largura do componente pai
+    marginTop: 1,
+  },
+  inputLabel: {
     color: '#FFF',
     marginBottom: 5,
-    textAlign: 'left', // Isso alinha o texto à esquerda
-    //alignItems: 'flex-start',
-    justifyContent: 'center'
+    textAlign: 'left',
   },
   input:{
     backgroundColor: '#FFF', //cor interna

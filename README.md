@@ -1,7 +1,8 @@
-# buscacep
+# consumoCerto
 
- >Buscador de ruas por cep
+ >Calcula consumo melhor com álcool ou gasolina
 
+[Documentação react-native](https://reactnative.dev/docs/view)
 
 ### Recursos
 
