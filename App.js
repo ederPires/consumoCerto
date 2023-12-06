@@ -54,11 +54,14 @@ export default function App() {
 
     return (
       <SafeAreaView style={styles.container}>
+
         <View style={styles.areaImagem}>
-          <Image
-            source={require('./src/assets/gas-removebg-preview.png')}
-            style={styles.imagem}
-          />
+          <View style={styles.imagemContainer}>
+            <Image
+              source={require('./src/assets/gas-bomb.png')}
+              style={styles.imagem}
+            />
+          </View>
         </View>
 
         <View style={styles.areaTitulo}>
@@ -121,21 +124,32 @@ const styles = StyleSheet.create({
     flex: 1, //ocupa todo espaço disponivel
     backgroundColor: '#000'
   },
-  areaImagem:{
+  areaImagem: {
+    width: '50%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignSelf: 'center', // Centraliza horizontalmente
+    backgroundColor: 'white', // Fundo branco
+    borderRadius: 100, // Borda redonda (ajuste conforme necessário)
+    overflow: 'hidden', // Garante que a borda redonda seja aplicada corretamente
+    marginTop: 20, // Espaço superior para centralizar a imagem
+  },
+  imagemContainer: {
+    width: 175, // Ajuste conforme necessário
+    height: 200, // Ajuste conforme necessário
+    overflow: 'hidden',
+    borderRadius: 100, // A metade da largura/altura para tornar a imagem circular
   },
   imagem: {
-    width: 200,
-    height: 200,
+    width: '100%',
+    height: '100%',
     borderRadius: 100, // A metade da largura/altura para tornar a imagem circular
-    resizeMode: 'cover', // ou 'contain', 'stretch', etc.
-    //resizeMode: 'contain', // ou 'cover', 'stretch', etc.
+    resizeMode: 'cover',
   },
   areaTitulo:{
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 45,
+    marginBottom: 25,
     marginTop: 20
   },
   textTitulo:{
@@ -152,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: '90%', // Define a largura para ocupar 90% da largura do componente pai
-    marginTop: 15,
+    marginTop: 1,
   },
   inputLabel: {
     color: '#FFF',
